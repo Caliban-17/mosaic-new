@@ -3,6 +3,7 @@ import './App.css';
 import InterlockingMosaic from './components/InterlockingMosaic';
 import Modal from './components/Modal';
 import SoundUtils from './utils/SoundUtils';
+import DebugPanel from './components/DebugPanel';
 
 function App() {
   const [activeTab, setActiveTab] = useState('explore');
@@ -11,6 +12,24 @@ function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [parentStack, setParentStack] = useState([]);
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // Handle back navigation with visual history
+  const handleBack = useCallback(() => {
+    // Remove unused previousParent variable to fix ESLint warning
+    // const previousParent = parentStack[parentStack.length - 1];
+    
+    if (currentView === 'fragments') {
+      setCurrentView('splinters');
+    } else if (currentView === 'splinters') {
+      setCurrentView('main');
+    }
+    
+    // Pop the latest parent from the stack
+    setParentStack(prev => prev.slice(0, -1));
+    
+    // Play sound with pitch variation for "going back"
+    SoundUtils.play('click', { pitch: 0.9 });
+  }, [currentView, parentStack]);
 
   // Initialize sound effects
   useEffect(() => {
@@ -38,7 +57,7 @@ function App() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [modalOpen, currentView]);
+  }, [modalOpen, currentView, handleBack]);
 
   // Handle tile click with enhanced feedback
   const handleTileClick = useCallback((tile) => {
@@ -67,24 +86,6 @@ function App() {
       setModalOpen(true);
     }
   }, [currentView]);
-
-  // Handle back navigation with visual history
-  const handleBack = useCallback(() => {
-    // Get the previous parent color for transition effect
-    const previousParent = parentStack[parentStack.length - 1];
-    
-    if (currentView === 'fragments') {
-      setCurrentView('splinters');
-    } else if (currentView === 'splinters') {
-      setCurrentView('main');
-    }
-    
-    // Pop the latest parent from the stack
-    setParentStack(prev => prev.slice(0, -1));
-    
-    // Play sound with pitch variation for "going back"
-    SoundUtils.play('click', { pitch: 0.9 });
-  }, [currentView, parentStack]);
 
   // Change active tab
   const handleTabChange = useCallback((tab) => {
@@ -117,6 +118,21 @@ function App() {
       SoundUtils.play('click');
     }
   }, []);
+
+  // Handle direct navigation to a specific level - now used by BreadcrumbNavigation
+  const handleDirectNavigation = useCallback((index) => {
+    // Validate index
+    if (index < 0 || index >= parentStack.length) return;
+    
+    // Update parent stack to include only items up to the clicked index
+    setParentStack(prev => prev.slice(0, index + 1));
+    
+    // Set view based on the level
+    setCurrentView(index === 0 ? 'splinters' : 'fragments');
+    
+    // Play click sound
+    SoundUtils.play('click');
+  }, [parentStack.length]);
 
   // Render philosophy content
   const renderPhilosophy = () => (
@@ -230,12 +246,12 @@ function App() {
             How It Works
           </button>
           
-          {/* Added sound toggle button */}
+          {/* Sound Controls */}
           <button 
             className={`sound-toggle ${soundEnabled ? 'sound-on' : 'sound-off'}`}
             onClick={handleToggleSound}
             aria-label={soundEnabled ? "Mute sounds" : "Enable sounds"}
-            title={soundEnabled ? "Mute sounds" : "Enable sounds"}
+            title={soundEnabled ? "Sound On" : "Sound Off"}
           >
             {soundEnabled ? "🔊" : "🔇"}
           </button>
@@ -262,7 +278,7 @@ function App() {
               parentColor={parentStack.length > 0 ? parentStack[parentStack.length - 1].color : null}
             />
             
-            {/* Added visual breadcrumb navigation */}
+            {/* Simple breadcrumb navigation */}
             {parentStack.length > 0 && (
               <div className="navigation-breadcrumb">
                 <button 
@@ -283,13 +299,7 @@ function App() {
                     key={index}
                     className={`breadcrumb-item ${index === parentStack.length - 1 ? 'active' : ''}`}
                     style={{ backgroundColor: parent.color }}
-                    onClick={() => {
-                      if (index < parentStack.length - 1) {
-                        setParentStack(prev => prev.slice(0, index + 1));
-                        setCurrentView(index === 0 ? 'splinters' : 'fragments');
-                        SoundUtils.play('click');
-                      }
-                    }}
+                    onClick={() => handleDirectNavigation(index)}
                     aria-label={`Navigate to level ${index + 1}`}
                   >
                     {index === 0 ? 'Splinters' : `Fragment ${index}`}
@@ -371,6 +381,9 @@ function App() {
           </div>
         )}
       </Modal>
+      
+      {/* Debug panel for troubleshooting */}
+      <DebugPanel />
     </div>
   );
 }

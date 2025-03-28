@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './InterlockingMosaic.css';
-import BackgroundImage from './BackgroundImage';
 import SoundUtils from '../utils/SoundUtils';
 import { throttle } from 'lodash';
 
-// Function to generate polygon vertices - more varied than just hexagons
+// Function to generate polygon vertices with controlled irregularity
 const generatePolygonVertices = (centerX, centerY, size, sides = 6, rotation = 0, irregularity = 0.3) => {
   return Array.from({ length: sides }, (_, i) => {
     const radiusVariation = 1 - (irregularity * Math.random());
@@ -16,73 +15,7 @@ const generatePolygonVertices = (centerX, centerY, size, sides = 6, rotation = 0
   });
 };
 
-// Function to generate a dense grid of positions for irregular polygons
-const generateDenseGrid = (width, height, targetCount = 1000) => {
-  const positions = [];
-  
-  // Calculate a base size to achieve approximately the target number
-  const divisions = Math.sqrt(targetCount * 0.65); // Adjusted factor for better density
-  const baseSize = Math.min(width, height) / (divisions * 0.85);
-  
-  // Create initial grid with specified density
-  const cols = Math.ceil(width / (baseSize * 0.65)); // Tighter spacing for more tiles
-  const rows = Math.ceil(height / (baseSize * 0.65));
-  
-  // Preset colors for better color harmony - using the colors from the screenshot
-  const colors = [
-    '#ff5252', '#ff9800', '#ffeb3b', '#4caf50', '#2196f3', // Red, Orange, Yellow, Green, Blue
-    '#9c27b0', '#673ab7', '#3f51b5', '#03a9f4', '#00bcd4', // Purple, Indigo, More blues
-    '#009688', '#8bc34a', '#cddc39', '#ffc107', '#ff5722', // Teal, Light green, Lime, Amber, Deep Orange
-    '#f44336', '#e91e63', '#9e9e9e', '#607d8b', '#795548'  // More Red, Pink, Grey, Blue Grey, Brown
-  ];
-  
-  // Generate initial positions
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      // Calculate base position with slight offset for odd rows
-      const x = col * baseSize * 0.65 + ((row % 2) * baseSize * 0.3);
-      const y = row * baseSize * 0.65;
-      
-      // Add randomness to position and size
-      const jitterX = (Math.random() - 0.5) * baseSize * 0.3;
-      const jitterY = (Math.random() - 0.5) * baseSize * 0.3;
-      
-      // More natural size variation with Gaussian-like distribution
-      const gaussian = () => ((Math.random() + Math.random() + Math.random()) / 3);
-      const sizeVariation = 0.4 + gaussian() * 0.6; // 40% to 100% of base size
-      const adjustedSize = baseSize * sizeVariation;
-      
-      // Randomly select number of sides with weighted distribution
-      const sidesProbability = Math.random();
-      const sides = sidesProbability < 0.6 ? 6 : // 60% hexagons
-                 sidesProbability < 0.8 ? 5 : // 20% pentagons
-                 sidesProbability < 0.9 ? 4 : // 10% squares
-                 Math.floor(Math.random() * 3) + 7; // 10% 7-9 sides
-      
-      // Randomize rotation
-      const rotation = Math.random() * Math.PI;
-      
-      // Create color clusters for a more aesthetic layout (tiles near each other have similar colors)
-      const colorIndex = Math.floor(
-        (Math.sin(x * 0.05) + Math.cos(y * 0.05) + 2) / 4 * colors.length
-      );
-      
-      positions.push({
-        x: x + jitterX,
-        y: y + jitterY,
-        size: adjustedSize,
-        sides,
-        rotation,
-        // Make some tiles have children (white dots) - about 40%
-        hasChildren: Math.random() < 0.4,
-        color: colors[colorIndex % colors.length]
-      });
-    }
-  }
-  
-  return positions;
-};
-
+// Main component
 const InterlockingMosaic = ({ 
   onTileClick,
   depth = 0, 
@@ -92,13 +25,71 @@ const InterlockingMosaic = ({
   const [selectedTile, setSelectedTile] = useState(null);
   const [isShattered, setIsShattered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageData, setImageData] = useState(null);
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
+  const imageRef = useRef(null);
   const isInitialized = useRef(false);
   const animFrameRef = useRef(null);
   
+  // Load the source image for the mosaic
+  useEffect(() => {
+    const img = new Image();
+    img.crossOrigin = "Anonymous"; // Enable CORS for the image
+    img.onload = () => {
+      console.log("Source image loaded successfully");
+      setImageLoaded(true);
+      imageRef.current = img;
+      
+      // Get image data
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d');
+      
+      // Set canvas to image dimensions
+      tempCanvas.width = img.width;
+      tempCanvas.height = img.height;
+      
+      // Draw the image to the canvas
+      tempCtx.drawImage(img, 0, 0);
+      
+      // Get the image data
+      setImageData(tempCtx.getImageData(0, 0, img.width, img.height));
+    };
+    
+    img.onerror = (err) => {
+      console.error("Failed to load source image:", err);
+    };
+    
+    // Set source to the image in the public folder
+    img.src = '/images/lady-liberty.jpeg';
+  }, []);
+  
+  // Sample a color from the source image at a specific position
+  const sampleColor = useCallback((x, y, width, height) => {
+    if (!imageData) return { r: 0, g: 0, b: 0 };
+    
+    // Map canvas coordinates to image coordinates
+    const imgX = Math.floor((x / width) * imageData.width);
+    const imgY = Math.floor((y / height) * imageData.height);
+    
+    // Calculate the position in the image data array
+    const pos = (imgY * imageData.width + imgX) * 4;
+    
+    // Get RGB values
+    const r = imageData.data[pos];
+    const g = imageData.data[pos + 1];
+    const b = imageData.data[pos + 2];
+    
+    // Return color as CSS color string
+    return `rgb(${r}, ${g}, ${b})`;
+  }, [imageData]);
+  
   // Initialize and render the mosaic
   useEffect(() => {
+    // Only proceed once the image is loaded
+    if (!imageLoaded) return;
+    
     const renderMosaic = () => {
       if (!containerRef.current || !canvasRef.current) return;
       
@@ -107,40 +98,90 @@ const InterlockingMosaic = ({
       const ctx = canvas.getContext('2d');
       
       // Set canvas size with device pixel ratio for sharper rendering
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = container.clientWidth * dpr;
-      canvas.height = container.clientHeight * dpr;
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      canvas.width = container.clientWidth * devicePixelRatio;
+      canvas.height = container.clientHeight * devicePixelRatio;
       
       // Set proper CSS dimensions
       canvas.style.width = `${container.clientWidth}px`;
       canvas.style.height = `${container.clientHeight}px`;
       
       // Scale canvas context for high DPI displays
-      ctx.scale(dpr, dpr);
+      ctx.scale(devicePixelRatio, devicePixelRatio);
       
       // Clear canvas
-      ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+      ctx.clearRect(0, 0, canvas.width / devicePixelRatio, canvas.height / devicePixelRatio);
       
       // Set background color
       ctx.fillStyle = '#13192a';
-      ctx.fillRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+      ctx.fillRect(0, 0, canvas.width / devicePixelRatio, canvas.height / devicePixelRatio);
       
       setIsLoading(true);
       
-      // Generate tiles directly without waiting for background image
-      generateAndDrawTiles(ctx, canvas.width / dpr, canvas.height / dpr);
+      // Generate tiles from the image
+      generateAndDrawTiles(ctx, canvas.width / devicePixelRatio, canvas.height / devicePixelRatio);
     };
     
-    // Function to generate and draw tiles
+    // Function to generate and draw tiles based on the image
     const generateAndDrawTiles = (ctx, width, height) => {
-      // Generate a large number of varied, colorful tiles that completely fill the canvas
-      const positions = generateDenseGrid(
-        width,
-        height,
-        viewType === 'main' ? 2380 : // Match screenshot tile count
-        viewType === 'splinters' ? 1200 : // Fewer in splinters
-        700 // Even fewer in fragments
-      );
+      // Determine tile density based on view type
+      const targetCount = viewType === 'main' ? 2380 : // Match screenshot tile count
+                         viewType === 'splinters' ? 1200 : // Fewer in splinters
+                         700; // Even fewer in fragments
+      
+      // Calculate grid dimensions for cell-based approach
+      const divisions = Math.sqrt(targetCount * 0.65);
+      const cellSize = Math.min(width, height) / (divisions * 0.85);
+      
+      // Generate positions on a grid
+      const positions = [];
+      const cols = Math.ceil(width / (cellSize * 0.65));
+      const rows = Math.ceil(height / (cellSize * 0.65));
+      
+      // Fill grid with positions
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          // Calculate base position with slight offset for odd rows
+          const x = col * cellSize * 0.65 + ((row % 2) * cellSize * 0.3);
+          const y = row * cellSize * 0.65;
+          
+          // Add randomness to position and size
+          const jitterX = (Math.random() - 0.5) * cellSize * 0.3;
+          const jitterY = (Math.random() - 0.5) * cellSize * 0.3;
+          
+          // More natural size variation with Gaussian-like distribution
+          const gaussian = () => ((Math.random() + Math.random() + Math.random()) / 3);
+          const sizeVariation = 0.4 + gaussian() * 0.6; // 40% to 100% of base size
+          const adjustedSize = cellSize * sizeVariation;
+          
+          // Randomly select number of sides with weighted distribution
+          const sidesProbability = Math.random();
+          const sides = sidesProbability < 0.6 ? 6 : // 60% hexagons
+                     sidesProbability < 0.8 ? 5 : // 20% pentagons
+                     sidesProbability < 0.9 ? 4 : // 10% squares
+                     Math.floor(Math.random() * 3) + 7; // 10% 7-9 sides
+          
+          // Calculate final position
+          const finalX = x + jitterX;
+          const finalY = y + jitterY;
+          
+          // Sample color from image at this position
+          const color = sampleColor(finalX, finalY, width, height);
+          
+          // Randomize rotation
+          const rotation = Math.random() * Math.PI;
+          
+          positions.push({
+            x: finalX,
+            y: finalY,
+            size: adjustedSize,
+            sides,
+            rotation,
+            hasChildren: Math.random() < 0.4,
+            color
+          });
+        }
+      }
       
       // Create tiles data
       const tileData = positions.map((pos, index) => {
@@ -164,7 +205,7 @@ const InterlockingMosaic = ({
         };
       });
       
-      // Draw each tile - FULLY OPAQUE to match screenshot
+      // Draw each tile
       tileData.forEach(tile => {
         drawPolygonTile(ctx, tile);
       });
@@ -187,11 +228,16 @@ const InterlockingMosaic = ({
       
       ctx.closePath();
       
-      // Fill with tile color - FULLY OPAQUE
+      // Fill with sampled color from the image
       ctx.fillStyle = color;
       ctx.fill();
       
-      // Add white dot in center for tiles with children - match screenshot style
+      // Add translucent white border to create separation between tiles
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)'; // Translucent white
+      ctx.lineWidth = 0.8; // Thin line
+      ctx.stroke();
+      
+      // Add white dot in center for tiles with children
       if (tile.hasChildren) {
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
@@ -200,8 +246,8 @@ const InterlockingMosaic = ({
       }
     };
     
-    // Only initialize once
-    if (!isInitialized.current) {
+    // Only initialize once the image is loaded
+    if (imageLoaded && !isInitialized.current) {
       renderMosaic();
       isInitialized.current = true;
     }
@@ -226,7 +272,7 @@ const InterlockingMosaic = ({
         cancelAnimationFrame(animFrameRef.current);
       }
     };
-  }, [viewType]);
+  }, [imageLoaded, viewType, sampleColor]);
   
   // Handle clicks on the mosaic with throttling
   const handleCanvasClick = useCallback(
@@ -236,7 +282,6 @@ const InterlockingMosaic = ({
       // Get click coordinates relative to canvas
       const canvas = canvasRef.current;
       const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
       
       // Adjust coordinates for high DPI displays
       const x = (event.clientX - rect.left);
@@ -301,7 +346,6 @@ const InterlockingMosaic = ({
   const animateShatter = (ctx, tile) => {
     const { points, color } = tile;
     const shatterPieces = [];
-    const dpr = window.devicePixelRatio || 1;
     
     // Create shatter pieces
     for (let i = 0; i < 8; i++) {
@@ -380,6 +424,11 @@ const InterlockingMosaic = ({
         ctx.fillStyle = piece.color;
         ctx.fill();
         
+        // Also add the border to shatter pieces
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+        
         ctx.restore();
       });
       
@@ -398,13 +447,10 @@ const InterlockingMosaic = ({
       ref={containerRef}
       aria-label={`${viewType} visualization`}
     >
-      {/* Background Image Component */}
-      <BackgroundImage />
-      
       {isLoading && (
         <div className="loading-spinner-container">
           <div className="loading-spinner"></div>
-          <p>Generating mosaic...</p>
+          <p>{imageLoaded ? 'Generating mosaic...' : 'Loading image...'}</p>
         </div>
       )}
       

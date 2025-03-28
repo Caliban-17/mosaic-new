@@ -1,0 +1,318 @@
+/* src/components/IPRightsVisualization.css */
+.ip-rights-visualization {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .ip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .ip-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #ffffff;
+    position: relative;
+  }
+  
+  .ip-header h3::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #4e54c8, #8f94fb);
+    border-radius: 2px;
+  }
+  
+  .details-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 5px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .details-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  .details-toggle:active {
+    transform: translateY(0);
+  }
+  
+  .rights-description {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 12px;
+  }
+  
+  .ip-rights-bar {
+    height: 36px;
+    width: 100%;
+    display: flex;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    position: relative;
+  }
+  
+  .concept-bar {
+    background: linear-gradient(90deg, #4e54c8, #8f94fb);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .concept-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), transparent);
+    z-index: 1;
+  }
+  
+  .execution-bar {
+    background: linear-gradient(90deg, #16a085, #2ecc71);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .execution-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), transparent);
+    z-index: 1;
+  }
+  
+  .bar-label {
+    font-weight: 500;
+    color: white;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    margin-right: 5px;
+  }
+  
+  .bar-value {
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+  }
+  
+  .concept-bar:hover,
+  .execution-bar:hover {
+    transform: scaleY(1.05);
+  }
+  
+  .ip-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  
+  .concept-color {
+    background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  }
+  
+  .execution-color {
+    background: linear-gradient(90deg, #16a085, #2ecc71);
+  }
+  
+  /* Detailed view styling */
+  .detailed-rights-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideDown 0.3s ease-out;
+  }
+  
+  .detail-section-header {
+    margin-bottom: 15px;
+  }
+  
+  .detail-section-header h4 {
+    font-size: 1rem;
+    color: #ffffff;
+    margin: 0;
+    font-weight: 500;
+  }
+  
+  .detailed-explanation {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+  }
+  
+  .detailed-explanation p {
+    margin-bottom: 15px;
+  }
+  
+  .rights-flow {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  
+  .flow-step {
+    display: flex;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex: 1;
+    min-width: 140px;
+    transition: all 0.2s ease;
+  }
+  
+  .flow-step:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .step-number {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #4e54c8, #8f94fb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: white;
+    flex-shrink: 0;
+  }
+  
+  .step-content h5 {
+    margin: 0 0 5px 0;
+    font-size: 0.9rem;
+    color: white;
+  }
+  
+  .step-content p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .flow-arrow {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0 5px;
+    flex-shrink: 0;
+  }
+  
+  .rights-examples {
+    margin-top: 20px;
+  }
+  
+  .rights-examples h5 {
+    font-size: 0.95rem;
+    color: white;
+    margin: 0 0 12px 0;
+  }
+  
+  .example-scenario {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    border-left: 3px solid #4e54c8;
+  }
+  
+  .example-scenario h6 {
+    margin: 0 0 5px 0;
+    font-size: 0.85rem;
+    color: white;
+  }
+  
+  .example-scenario p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .ip-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .details-toggle {
+      align-self: flex-end;
+    }
+    
+    .rights-flow {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .flow-arrow {
+      transform: rotate(90deg);
+      align-self: center;
+      margin: 5px 0;
+    }
+  }

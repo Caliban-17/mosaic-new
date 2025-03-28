@@ -1,77 +1,37 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import './BackgroundImage.css';
 
-// This component specifically handles the background image loading
+// This version directly embeds an image URL rather than testing local paths
 const BackgroundImage = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
-  const imgRef = useRef(null);
 
-  // List of possible image paths to try - using both .jpg and .jpeg extensions
-  const imagePaths = [
-    // JPG extensions (matching your actual file)
-    '/lady-liberty.jpg',
-    './lady-liberty.jpg',
-    'lady-liberty.jpg',
-    `${process.env.PUBLIC_URL}/lady-liberty.jpg`,
-    '/images/lady-liberty.jpg',
-    '/public/lady-liberty.jpg',
-    
-    // JPEG extensions (in case of future changes)
-    '/lady-liberty.jpeg',
-    './lady-liberty.jpeg',
-    'lady-liberty.jpeg',
-    `${process.env.PUBLIC_URL}/lady-liberty.jpeg`,
-    '/images/lady-liberty.jpeg',
-    '/public/lady-liberty.jpeg'
-  ];
+  // Direct links to public domain artwork
+  const imageUrl = "https://upload.wikimedia.org/wikipedia/commons/a/a7/Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg";
+  
+  // Fallback URL in case the first one fails
+  const fallbackUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1920px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg";
 
-  // Try to load the image from each path
-  useEffect(() => {
-    let currentPathIndex = 0;
-    let mounted = true;
+  // Handle image load success
+  const handleImageLoad = () => {
+    console.log('Background image loaded successfully');
+    setImageLoaded(true);
+  };
 
-    const tryLoadImage = () => {
-      if (!mounted || currentPathIndex >= imagePaths.length) {
-        if (mounted && !imageLoaded) {
-          console.error("Failed to load background image from any path");
-          setImageError(true);
-        }
-        return;
-      }
-
-      const img = new Image();
-      img.onload = () => {
-        if (mounted) {
-          console.log(`Successfully loaded image from: ${imagePaths[currentPathIndex]}`);
-          setImageLoaded(true);
-          if (imgRef.current) {
-            imgRef.current.src = imagePaths[currentPathIndex];
-          }
-        }
-      };
-      
-      img.onerror = () => {
-        if (mounted) {
-          console.warn(`Failed to load image from: ${imagePaths[currentPathIndex]}`);
-          currentPathIndex++;
-          tryLoadImage();
-        }
-      };
-
-      img.src = imagePaths[currentPathIndex];
+  // Handle image load error
+  const handleImageError = (e) => {
+    console.error('Failed to load primary background image, trying fallback');
+    // Try the fallback image
+    e.target.src = fallbackUrl;
+    e.target.onerror = () => {
+      console.error('Fallback image also failed to load');
+      // If fallback also fails, we still want to show something
+      setImageLoaded(true); // Let the UI show something
     };
-
-    tryLoadImage();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  };
 
   return (
     <div className="background-image-container">
-      {!imageLoaded && !imageError && (
+      {!imageLoaded && (
         <div className="loading-overlay">
           <div className="loading-spinner"></div>
           <p>Loading background image...</p>
@@ -79,17 +39,12 @@ const BackgroundImage = () => {
       )}
       
       <img 
-        ref={imgRef}
         className={`background-image ${imageLoaded ? 'loaded' : ''}`}
-        src={imageError ? '' : ''}
-        alt="Liberty Leading the People background"
+        src={imageUrl}
+        alt="Liberty Leading the People by Eugène Delacroix"
+        onLoad={handleImageLoad}
+        onError={handleImageError}
       />
-      
-      {imageError && (
-        <div className="error-message">
-          <p>Could not load background image. Please check your image paths.</p>
-        </div>
-      )}
     </div>
   );
 };
