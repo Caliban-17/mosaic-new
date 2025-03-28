@@ -15,9 +15,6 @@ function App() {
 
   // Handle back navigation with visual history
   const handleBack = useCallback(() => {
-    // Remove unused previousParent variable to fix ESLint warning
-    // const previousParent = parentStack[parentStack.length - 1];
-    
     if (currentView === 'fragments') {
       setCurrentView('splinters');
     } else if (currentView === 'splinters') {
@@ -139,9 +136,10 @@ function App() {
     <div className="content-area philosophy-content">
       <h1>Our Philosophy</h1>
       <p className="lead">
-        Mosaic is a platform where the collaboration of diverse ideas forms the cornerstone of
-        innovation. Like the timeless artistry of Roman mosaics, each contribution builds a unique
-        whole, celebrating collective creativity.
+        Mosaic is founded on the belief that creative work flourishes through collaboration, 
+        where diversity of ideas forms the cornerstone of innovation. Like the timeless artistry of 
+        Roman mosaics, each contribution builds a unique whole, celebrating collective creativity 
+        while honoring individual input.
       </p>
       
       <section className="content-section">
@@ -152,6 +150,11 @@ function App() {
           evaluates both conceptual contributions and execution work, ensuring that idea originators 
           receive fair recognition even if they lack the technical skills to execute their vision.
         </p>
+        <p>
+          In the classical tradition, where master artisans and apprentices worked together to create 
+          enduring works, we believe in recognizing both the visionary and the craftsperson. Each 
+          tile in our mosaic represents the perfect balance between concept and execution.
+        </p>
       </section>
       
       <section className="content-section">
@@ -160,6 +163,11 @@ function App() {
           Great ideas rarely emerge perfectly formed. They evolve through iteration, reinterpretation, 
           and collaborative enhancement. Our system of Tiles, Splinters, and Fragments visualizes this 
           creative evolution, making the intellectual genealogy of projects transparent and traceable.
+        </p>
+        <p>
+          This process mirrors the evolution of classical art forms across centuries, where themes and 
+          techniques were passed down, refined, and transformed. Every fragment in our system acknowledges 
+          its origins while celebrating its unique contributions.
         </p>
       </section>
       
@@ -171,48 +179,122 @@ function App() {
           gives 40% weight to conceptual work and 60% to execution, valuing both the idea creator 
           and those who bring it to life.
         </p>
+        <p>
+          In the spirit of the Enlightenment thinkers who inspired works like "Liberty Leading the People," 
+          we believe in the free exchange of ideas while ensuring proper attribution. Our framework 
+          enables innovation while preserving the lineage of creative thought.
+        </p>
       </section>
     </div>
   );
 
-  // Render how it works content
-  const renderHowItWorks = () => (
-    <div className="content-area how-it-works-content">
-      <h1>How Mosaic Works</h1>
+  // Render projects content
+  const renderProjects = () => (
+    <div className="content-area projects-content">
+      <h1>Projects</h1>
+      <p className="lead">
+        Explore a diverse collection of creative collaborations managed through our visual version 
+        control system. Each project represents a unique mosaic of contributions from talented individuals.
+      </p>
       
-      <div className="steps-container">
-        <div className="step">
-          <div className="step-number">1</div>
-          <div className="step-content">
-            <h3>Create or Join a Creative Project</h3>
-            <p>Each creative project appears as a unique shape in the Mosaic. The size reflects the amount of work invested, and the color represents the project's creative domain.</p>
-          </div>
+      <div className="projects-grid">
+        <div className="project-card">
+          <div className="project-preview" style={{ backgroundColor: "#4e54c8" }}></div>
+          <h3>Renaissance Reimagined</h3>
+          <p>A collaborative digital recreation of classical Renaissance techniques applied to modern subjects.</p>
+          <div className="project-contributors">12 contributors</div>
         </div>
         
-        <div className="step">
-          <div className="step-number">2</div>
-          <div className="step-content">
-            <h3>Explore Different Versions with Splinters</h3>
-            <p>Click on a project with a white center dot to break it apart and reveal its Splinters – variations that maintain the original vision while exploring new directions.</p>
-          </div>
+        <div className="project-card">
+          <div className="project-preview" style={{ backgroundColor: "#16a085" }}></div>
+          <h3>Voices of Liberty</h3>
+          <p>An audio-visual essay exploring the themes of freedom in contemporary society.</p>
+          <div className="project-contributors">8 contributors</div>
         </div>
         
-        <div className="step">
-          <div className="step-number">3</div>
-          <div className="step-content">
-            <h3>Create Personal Interpretations with Fragments</h3>
-            <p>Splinters can be further broken down into Fragments – more radical reinterpretations that take creative liberties while still acknowledging their source.</p>
-          </div>
+        <div className="project-card">
+          <div className="project-preview" style={{ backgroundColor: "#e74c3c" }}></div>
+          <h3>Architectural Visions</h3>
+          <p>Conceptual designs inspired by neoclassical architecture adapted for sustainable urban living.</p>
+          <div className="project-contributors">15 contributors</div>
         </div>
         
-        <div className="step">
-          <div className="step-number">4</div>
-          <div className="step-content">
-            <h3>Fair IP Rights Distribution</h3>
-            <p>Our unique algorithm balances concept creation (40%) and execution work (60%) to ensure everyone gets appropriate credit for their contributions to the creative process.</p>
-          </div>
+        <div className="project-card">
+          <div className="project-preview" style={{ backgroundColor: "#f39c12" }}></div>
+          <h3>Digital Antiquities</h3>
+          <p>Modern interpretations of ancient mosaic techniques through digital media.</p>
+          <div className="project-contributors">7 contributors</div>
         </div>
       </div>
+      
+      <div className="projects-cta">
+        <button className="cta-button">Start Your Project</button>
+        <button className="secondary-button">Browse All Projects</button>
+      </div>
+    </div>
+  );
+
+  // Render community content
+  const renderCommunity = () => (
+    <div className="content-area community-content">
+      <h1>Community</h1>
+      <p className="lead">
+        Join a vibrant collective of creators dedicated to collaborative innovation and fair recognition 
+        of creative contributions. Our community spans various disciplines, united by a shared philosophy.
+      </p>
+      
+      <section className="community-section">
+        <h2>Creative Collectives</h2>
+        <p>
+          Discover groups of like-minded creators working together on thematic projects. 
+          Each collective functions as its own ecosystem within the broader Mosaic community,
+          sharing resources and expertise while maintaining their unique creative identity.
+        </p>
+        <div className="collectives-preview">
+          <div className="collective-item">Classical Revivalists</div>
+          <div className="collective-item">Digital Humanists</div>
+          <div className="collective-item">Modern Enlightenment</div>
+          <div className="collective-item">Visual Storytellers</div>
+        </div>
+      </section>
+      
+      <section className="community-section">
+        <h2>Events & Workshops</h2>
+        <p>
+          Participate in regular community events designed to foster collaboration, 
+          share knowledge, and celebrate creative achievements. From virtual workshops 
+          to exhibition showcases, our events calendar offers opportunities for growth and connection.
+        </p>
+        <div className="events-calendar">
+          <div className="event-item">
+            <div className="event-date">APR 15</div>
+            <div className="event-info">
+              <h4>Workshop: The Art of Collaborative Design</h4>
+              <p>Virtual • 2:00 PM EDT</p>
+            </div>
+          </div>
+          <div className="event-item">
+            <div className="event-date">MAY 02</div>
+            <div className="event-info">
+              <h4>Exhibition: New Classical Movement</h4>
+              <p>Online Gallery • All Day</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section className="community-section">
+        <h2>Join Us</h2>
+        <p>
+          Become part of our growing community of creators, thinkers, and makers.
+          Whether you're an established artist or just beginning your creative journey,
+          there's a place for you in the Mosaic.
+        </p>
+        <div className="join-actions">
+          <button className="cta-button">Create Account</button>
+          <button className="secondary-button">Learn More</button>
+        </div>
+      </section>
     </div>
   );
 
@@ -235,15 +317,23 @@ function App() {
             aria-selected={activeTab === 'philosophy'}
             role="tab"
           >
-            Philosophy
+            Our Philosophy
           </button>
           <button 
-            className={`nav-tab ${activeTab === 'howItWorks' ? 'active' : ''}`}
-            onClick={() => handleTabChange('howItWorks')}
-            aria-selected={activeTab === 'howItWorks'}
+            className={`nav-tab ${activeTab === 'projects' ? 'active' : ''}`}
+            onClick={() => handleTabChange('projects')}
+            aria-selected={activeTab === 'projects'}
             role="tab"
           >
-            How It Works
+            Projects
+          </button>
+          <button 
+            className={`nav-tab ${activeTab === 'community' ? 'active' : ''}`}
+            onClick={() => handleTabChange('community')}
+            aria-selected={activeTab === 'community'}
+            role="tab"
+          >
+            Community
           </button>
           
           {/* Sound Controls */}
@@ -311,7 +401,8 @@ function App() {
         )}
         
         {activeTab === 'philosophy' && renderPhilosophy()}
-        {activeTab === 'howItWorks' && renderHowItWorks()}
+        {activeTab === 'projects' && renderProjects()}
+        {activeTab === 'community' && renderCommunity()}
       </main>
       
       {/* Modal for displaying tile details */}
