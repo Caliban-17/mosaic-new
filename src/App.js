@@ -146,7 +146,7 @@ function App() {
         <h2>Fair Recognition for All Contributors</h2>
         <p>
           One of the greatest challenges in creative collaboration is ensuring that everyone receives 
-          appropriate credit and compensation for their contributions. Mosaic's unique algorithm 
+          appropriate credit and compensation for their contributions. Mosaic&apos;s unique algorithm 
           evaluates both conceptual contributions and execution work, ensuring that idea originators 
           receive fair recognition even if they lack the technical skills to execute their vision.
         </p>
@@ -269,7 +269,7 @@ function App() {
           <div className="event-item">
             <div className="event-date">APR 15</div>
             <div className="event-info">
-              <h4>Workshop: The Art of Collaborative Design</h4>
+              <h4>Workshop: &quot;The Art of Collaborative Design&quot;</h4>
               <p>Virtual • 2:00 PM EDT</p>
             </div>
           </div>

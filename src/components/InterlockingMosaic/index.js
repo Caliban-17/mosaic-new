@@ -6,7 +6,7 @@ import './InterlockingMosaic.css';
 // Import custom hooks
 import { useFocusMode } from '../../hooks/useFocusMode';
 import { useResponsiveLayout } from '../../hooks/useResponsiveLayout';
-import usePanAndZoom from '../../hooks/usePanAndZoom'; // Fixed import as default
+import usePanAndZoom from '../../hooks/usePanAndZoom';
 
 // Import utilities
 import { createInteractionFeedback, isPointInPolygon } from '../../utils/interactionUtils';
@@ -18,17 +18,17 @@ import {
 } from '../../utils/tessellationUtils';
 import SoundUtils from '../../utils/SoundUtils';
 
-// Import sub-components - fix MosaicCanvas import and usage
-import MosaicCanvas from './MosaicCanvas';
+// Import sub-components
 import MosaicLoader from './MosaicLoader';
 import MosaicStatus from './MosaicStatus';
 import MosaicControls from './MosaicControls';
 
+// eslint-disable-next-line no-unused-vars
 const InterlockingMosaic = ({ 
   onTileClick,
-  depth = 0, 
+  depth = 0, // eslint-disable-line no-unused-vars
   viewType = 'main',
-  parentColor = null
+  parentColor = null // eslint-disable-line no-unused-vars
 }) => {
   // State for tiles and interaction
   const [tiles, setTiles] = useState([]);
@@ -47,26 +47,21 @@ const InterlockingMosaic = ({
   const isInitialized = useRef(false);
   const animFrameRef = useRef(null);
   
-  // Use our custom hooks
+  // Use our custom hooks - removed unused variables
   const {
     focusMode,
     focusScale,
-    focusCenter,
-    transitionActive,
     interactionEnabled,
     initializeFocus,
     exitFocus
   } = useFocusMode();
   
   const { 
-    screenSize, 
     getTileCount
   } = useResponsiveLayout();
   
   const {
-    transform,
-    resetTransform,
-    isDragging
+    transform
   } = usePanAndZoom(containerRef);
   
   // Create utility functions
@@ -421,7 +416,7 @@ const InterlockingMosaic = ({
     }, 50),
     [tiles, isShattered, interactionEnabled, selectedTile, interactionFeedback]
   );
-
+  
   return (
     <div 
       className={`interlocking-mosaic ${isShattered ? 'shattered' : ''} ${viewType} ${focusMode ? 'focus-mode' : ''}`}
@@ -470,6 +465,14 @@ const InterlockingMosaic = ({
       )}
     </div>
   );
+};
+
+// Add prop types validation
+InterlockingMosaic.propTypes = {
+  onTileClick: PropTypes.func,
+  depth: PropTypes.number,
+  viewType: PropTypes.string,
+  parentColor: PropTypes.string
 };
 
 export default InterlockingMosaic;

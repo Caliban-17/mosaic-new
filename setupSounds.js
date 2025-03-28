@@ -3,6 +3,9 @@
 // Script to set up sound files for the application
 // Run this with: node setupSounds.js
 
+// Added eslint-disable to handle Node.js globals in this file
+/* eslint-disable no-undef */
+
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
@@ -109,3 +112,4 @@ setTimeout(() => {
 
 console.log('Sound setup script running. This will download required sound effects for the Mosaic application.');
 console.log('Once complete, the sounds will be available in the public/sounds directory.');
+/* eslint-enable no-undef */

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import './SoundControls.css';
+import SoundUtils from '../utils/SoundUtils';
 
 const SoundControls = ({ soundEnabled, onToggleSound }) => {
   const [volumeOpen, setVolumeOpen] = useState(false);
@@ -38,7 +39,7 @@ const SoundControls = ({ soundEnabled, onToggleSound }) => {
   const handleToggleSound = () => {
     onToggleSound();
     
-    // Play a sound effect when enabling (if not already playing)
+    // Play a confirmation sound when enabling (if not already playing)
     if (!soundEnabled) {
       setTimeout(() => SoundUtils.play('click'), 100);
     }

@@ -4,6 +4,7 @@
 // A simple node script to generate a placeholder background image
 // Run with: node backgroundSetup.js
 
+/* eslint-disable no-undef */
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
@@ -69,7 +70,6 @@ const existingImageCheck = filePaths.some(filePath => {
 
 if (existingImageCheck) {
   console.log('Background image already exists. No need to download.');
-  // eslint-disable-next-line no-undef
   process.exit(0);
 }
 
@@ -105,3 +105,4 @@ tryDownloadFromSources()
   .catch(error => {
     console.error('Unexpected error:', error);
   });
+/* eslint-enable no-undef */
