@@ -26,7 +26,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  background-color: rgba(19, 25, 42, 0.8);
+  background-color: rgba(19, 25, 42, 0.9);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   position: fixed;
@@ -36,6 +36,7 @@ body {
   z-index: 100;
   height: 70px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .logo {
@@ -56,6 +57,7 @@ body {
 .nav-tabs {
   display: flex;
   gap: 5px;
+  align-items: center;
 }
 
 .nav-tab {
@@ -91,6 +93,37 @@ body {
   background: linear-gradient(45deg, #4e54c8, #8f94fb);
 }
 
+/* Sound toggle button */
+.sound-toggle {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-left: 10px;
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sound-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.sound-toggle.sound-on {
+  color: #4e54c8;
+}
+
+.sound-toggle.sound-off {
+  color: rgba(255, 255, 255, 0.5);
+}
+
 /* Main content area */
 .main-content {
   margin-top: 70px;
@@ -105,7 +138,7 @@ body {
   position: relative;
 }
 
-/* Back button */
+/* Back button with enhanced styling */
 .back-button {
   position: fixed;
   top: 85px;
@@ -122,11 +155,18 @@ body {
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .back-button:hover {
   background-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.back-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* Content areas */
@@ -137,12 +177,16 @@ body {
   margin-right: auto;
 }
 
-/* Philosophy page styles */
+/* Philosophy page styles with enhanced readability */
 .philosophy-content h1 {
   font-size: 2.5rem;
   font-weight: 300;
   margin-bottom: 20px;
   text-align: center;
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .philosophy-content .lead {
@@ -162,12 +206,33 @@ body {
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.content-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background-color: rgba(255, 255, 255, 0.07);
 }
 
 .content-section h2 {
   font-size: 1.5rem;
   margin-bottom: 15px;
   color: #ffffff;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.content-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  border-radius: 3px;
 }
 
 .content-section p {
@@ -176,12 +241,16 @@ body {
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* How it works page styles */
+/* How it works page styles with improved visuals */
 .how-it-works-content h1 {
   font-size: 2.5rem;
   font-weight: 300;
   margin-bottom: 40px;
   text-align: center;
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .steps-container {
@@ -198,6 +267,7 @@ body {
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .step:hover {
@@ -217,6 +287,7 @@ body {
   font-weight: bold;
   font-size: 1.2rem;
   flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .step-content h3 {
@@ -231,7 +302,7 @@ body {
   line-height: 1.6;
 }
 
-/* Modal content styling */
+/* Modal content styling with improved details */
 .project-details {
   color: #ffffff;
 }
@@ -254,65 +325,114 @@ body {
 
 .color-preview {
   width: 100%;
-  height: 50px;
+  height: 60px;
   margin: 20px 0;
-  border-radius: 6px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.color-preview:hover {
+  transform: scale(1.02);
 }
 
 .detail-description {
   margin-top: 20px;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 3px solid #4e54c8;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-  .app-header {
-    padding: 15px;
-    flex-direction: column;
-    height: auto;
-    gap: 15px;
-    align-items: flex-start;
-  }
-  
-  .main-content {
-    margin-top: 110px;
-  }
-  
-  .mosaic-container {
-    height: calc(100vh - 110px);
-  }
-  
-  .content-area {
-    padding: 20px;
-  }
-  
-  .back-button {
-    top: 125px;
-    left: 15px;
-  }
-  
-  .nav-tabs {
-    width: 100%;
-    justify-content: space-between;
-  }
-  
-  .nav-tab {
-    padding: 8px 12px;
-    font-size: 0.9rem;
-  }
-  
-  .philosophy-content h1,
-  .how-it-works-content h1 {
-    font-size: 2rem;
-  }
-  
-  .content-section {
-    padding: 20px;
-  }
-  
-  .step {
-    padding: 15px;
-    gap: 15px;
-  }
+/* IP Rights visualization */
+.ip-rights-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ip-rights-section h3 {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  color: #ffffff;
+}
+
+.ip-rights-bar {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.concept-bar {
+  background: linear-gradient(90deg, #4e54c8, #8f94fb);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.execution-bar {
+  background: linear-gradient(90deg, #16a085, #2ecc71);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.ip-rights-note {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* Navigation breadcrumb */
+.navigation-breadcrumb {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 90;
+  background: rgba(19, 25, 42, 0.8);
+  padding: 8px 12px;
+  border-radius: 30px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.breadcrumb-home,
+.breadcrumb-item {
+  border: none;
+  color: white;
+  padding: 6px 15px;
+  font-size: 0.85rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.breadcrumb-home:hover,
+.breadcrumb-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.breadcrumb-item.active {
+  font-weight: bold;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
 }
