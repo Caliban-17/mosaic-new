@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import './Modal.css';
 import SoundUtils from '../utils/SoundUtils';
 
@@ -52,6 +53,14 @@ const Modal = ({ isOpen, onClose, title, children }) => {
       </div>
     </div>
   );
+};
+
+// Add PropTypes validation
+Modal.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  title: PropTypes.string,
+  children: PropTypes.node
 };
 
 export default Modal;

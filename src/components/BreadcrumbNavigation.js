@@ -1,5 +1,6 @@
 // src/components/BreadcrumbNavigation.js
 import React from 'react';
+import PropTypes from 'prop-types';
 import './BreadcrumbNavigation.css';
 import SoundUtils from '../utils/SoundUtils';
 
@@ -83,6 +84,19 @@ const BreadcrumbNavigation = ({
       </div>
     </div>
   );
+};
+
+// Add proper PropTypes validation
+BreadcrumbNavigation.propTypes = {
+  parentStack: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      color: PropTypes.string
+    })
+  ),
+  currentView: PropTypes.string,
+  onNavigate: PropTypes.func,
+  onReset: PropTypes.func
 };
 
 export default BreadcrumbNavigation;

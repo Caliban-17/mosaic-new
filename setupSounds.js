@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 // Script to set up sound files for the application
 // Run this with: node setupSounds.js
 
@@ -70,6 +72,7 @@ const createPlaceholderSound = (filename) => {
     // Check if ffmpeg is available (optional)
     try {
       const { execSync } = require('child_process');
+      // eslint-disable-next-line no-unused-vars
       const ffmpegCheck = execSync('ffmpeg -version', { stdio: 'pipe' });
       
       // If ffmpeg is available, create a short silent mp3

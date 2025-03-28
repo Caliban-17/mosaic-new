@@ -1,7 +1,7 @@
 // src/components/SoundControls.js
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import './SoundControls.css';
-import SoundUtils from '../utils/SoundUtils';
 
 const SoundControls = ({ soundEnabled, onToggleSound }) => {
   const [volumeOpen, setVolumeOpen] = useState(false);
@@ -140,6 +140,12 @@ const SoundControls = ({ soundEnabled, onToggleSound }) => {
       )}
     </div>
   );
+};
+
+// Add PropTypes validation
+SoundControls.propTypes = {
+  soundEnabled: PropTypes.bool,
+  onToggleSound: PropTypes.func
 };
 
 export default SoundControls;

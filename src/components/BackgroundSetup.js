@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 // backgroundSetup.js
 // A simple node script to generate a placeholder background image
 // Run with: node backgroundSetup.js
@@ -17,6 +19,9 @@ const IMAGE_SOURCES = [
   // Relativity by M.C. Escher (as a fallback)
   'https://upload.wikimedia.org/wikipedia/en/a/a3/Escher%27s_Relativity.jpg'
 ];
+
+// Public directory path
+const publicDir = path.join(__dirname, '..', '..', 'public');
 
 // File paths to try
 const filePaths = [
@@ -64,7 +69,8 @@ const existingImageCheck = filePaths.some(filePath => {
 
 if (existingImageCheck) {
   console.log('Background image already exists. No need to download.');
-    process.exit(0);
+  // eslint-disable-next-line no-undef
+  process.exit(0);
 }
 
 // If image doesn't exist, download it
