@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/mosaic-new/static/css/main.7fa55e4c.css",
+    "main.js": "/mosaic-new/static/js/main.5a246627.js",
+    "static/js/453.f254d003.chunk.js": "/mosaic-new/static/js/453.f254d003.chunk.js",
+    "index.html": "/mosaic-new/index.html",
+    "main.7fa55e4c.css.map": "/mosaic-new/static/css/main.7fa55e4c.css.map",
+    "main.5a246627.js.map": "/mosaic-new/static/js/main.5a246627.js.map",
+    "453.f254d003.chunk.js.map": "/mosaic-new/static/js/453.f254d003.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7fa55e4c.css",
+    "static/js/main.5a246627.js"
+  ]
+}
