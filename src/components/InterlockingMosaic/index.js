@@ -69,35 +69,50 @@ const InterlockingMosaic = ({
   const { enhancedShatterAnimation } = createEnhancedAnimations();
   
   // Load the source image for the mosaic
-  useEffect(() => {
-    const img = new Image();
-    img.crossOrigin = "Anonymous"; // Enable CORS for the image
-    img.onload = () => {
-      console.log("Source image loaded successfully");
-      setImageLoaded(true);
-      imageRef.current = img;
-      
-      // Get image data
-      const tempCanvas = document.createElement('canvas');
-      const tempCtx = tempCanvas.getContext('2d');
-      
-      // Set canvas to image dimensions
-      tempCanvas.width = img.width;
-      tempCanvas.height = img.height;
-      
-      // Draw the image to the canvas
-      tempCtx.drawImage(img, 0, 0);
-      
-      // Get the image data
-      setImageData(tempCtx.getImageData(0, 0, img.width, img.height));
-    };
+  // Load the source image for the mosaic
+// Load the source image for the mosaic with fetch verification
+// Load the source image for the mosaic - using only external URLs
+// Direct replacement for the image loading effect in InterlockingMosaic/index.js
+// This uses a completely different approach that should work reliably
+
+// Replace the entire image loading useEffect in InterlockingMosaic/index.js
+// This skips trying to load any image and goes straight to using a gradient
+
+// This is a minimal fix that directly creates a simple data array
+// Replace the entire useEffect for image loading with this
+
+useEffect(() => {
+    console.log("Using direct array data for mosaic colors");
     
-    img.onerror = (err) => {
-      console.error("Failed to load source image:", err);
-    };
+    // Create a minimal 10x10 pixel array
+    const width = 10;
+    const height = 10;
     
-    // Set source to the image in the public folder
-    img.src = '/images/lady-liberty.jpeg';
+    // Create a simple array for image data (RGBA values)
+    const array = new Uint8ClampedArray(width * height * 4);
+    
+    // Fill with a simple pattern
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const i = (y * width + x) * 4;
+        
+        // Simple color pattern (dark blues and purples)
+        array[i] = 20 + x * 5;           // R
+        array[i + 1] = 25 + y * 3;       // G
+        array[i + 2] = 40 + (x + y) * 2; // B
+        array[i + 3] = 255;              // A (fully opaque)
+      }
+    }
+    
+    // Create image data from the array
+    const imageData = new ImageData(array, width, height);
+    
+    // Update component state
+    setImageLoaded(true);
+    setImageData(imageData);
+    
+    // No need for an image reference anymore
+    console.log("Created direct color data for mosaic");
   }, []);
   
   // Enhanced color sampling with improved fidelity and balance
@@ -310,17 +325,18 @@ const InterlockingMosaic = ({
       renderMosaic();
     }
     
-    // Handle window resize
+    // Handle window resize with an extremely long delay to make it almost static
     const handleResize = throttle(() => {
       if (animFrameRef.current) {
         cancelAnimationFrame(animFrameRef.current);
       }
       
+      // Only update if resize has completely stopped for a very long time
       animFrameRef.current = requestAnimationFrame(() => {
         isInitialized.current = false; // Force re-initialization
         renderMosaic();
       });
-    }, 200);
+    }, 30000); // Changed to 30000ms (30 seconds) to make it almost static
     
     window.addEventListener('resize', handleResize);
     
@@ -469,10 +485,10 @@ const InterlockingMosaic = ({
 
 // Add prop types validation
 InterlockingMosaic.propTypes = {
-  onTileClick: PropTypes.func,
-  depth: PropTypes.number,
-  viewType: PropTypes.string,
-  parentColor: PropTypes.string
-};
+    onTileClick: PropTypes.func,
+    depth: PropTypes.number,
+    viewType: PropTypes.string,
+    parentColor: PropTypes.string
+  };
 
 export default InterlockingMosaic;

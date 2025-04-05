@@ -180,7 +180,7 @@ function App() {
           and those who bring it to life.
         </p>
         <p>
-          In the spirit of the Enlightenment thinkers who inspired works like "Liberty Leading the People," 
+          In the spirit of the Enlightenment thinkers who inspired works like &quot;Liberty Leading the People,&quot; 
           we believe in the free exchange of ideas while ensuring proper attribution. Our framework 
           enables innovation while preserving the lineage of creative thought.
         </p>
@@ -269,7 +269,7 @@ function App() {
           <div className="event-item">
             <div className="event-date">APR 15</div>
             <div className="event-info">
-              <h4>Workshop: &quot;The Art of Collaborative Design&quot;</h4>
+              <h4>Workshop: &ldquo;The Art of Collaborative Design&rdquo;</h4>
               <p>Virtual • 2:00 PM EDT</p>
             </div>
           </div>
@@ -287,8 +287,8 @@ function App() {
         <h2>Join Us</h2>
         <p>
           Become part of our growing community of creators, thinkers, and makers.
-          Whether you're an established artist or just beginning your creative journey,
-          there's a place for you in the Mosaic.
+          Whether you&apos;re an established artist or just beginning your creative journey,
+          there&apos;s a place for you in the Mosaic.
         </p>
         <div className="join-actions">
           <button className="cta-button">Create Account</button>
