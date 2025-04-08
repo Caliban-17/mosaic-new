@@ -4,6 +4,7 @@
  * optimization steps (gradient calc), and drawing color-filled tiles.
  */
 import { Delaunay } from 'd3-delaunay';
+console.log('Delaunay import:', Delaunay);
 import polygonClipping from 'polygon-clipping';
 
 // --- Geometric Utilities ---
