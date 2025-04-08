@@ -1,5 +1,16 @@
-body {
+/* --- START OF FILE src/index.css --- */
+
+/* Step 2: Ensure Root Elements allow full height */
+html, body, #root {
+  height: 100%;
+  width: 100%; /* Also good practice */
   margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent body scrollbars */
+}
+
+body {
+  /* Original font settings */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -11,3 +22,4 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* --- END OF FILE src/index.css --- */
